@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sadece Senin İçin Hümeyra... ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: #03001e;
+            background: linear-gradient(135deg, #050515 0%, #12002b 50%, #1a001a 100%);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        #starsCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 450px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 30px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8),
+                        inset 0 0 20px rgba(255, 255, 255, 0.05);
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff007f, #ff758c, #ff7eb3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: #d1d1d1;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .counter-box {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 0, 128, 0.2);
+            margin-bottom: 25px;
+        }
+
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ff4da6;
+        }
+
+        .time-label {
+            font-size: 0.65rem;
+            color: #aaa;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .music-player {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 10px 15px;
+            border-radius: 50px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .vinyl {
+            width: 35px;
+            height: 35px;
+            background: radial-gradient(circle, #000 30%, #333 31%, #111 60%, #000 100%);
+            border-radius: 50%;
+            border: 2px solid #ff007f;
+            animation: spin 4s linear infinite;
+            animation-play-state: paused;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .song-info {
+            text-align: left;
+            font-size: 0.8rem;
+        }
+
+        .song-title {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .song-artist {
+            color: #888;
+            font-size: 0.7rem;
+        }
+
+        .content-card {
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            transition: all 0.4s ease;
+        }
+
+        .message-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #f0f0f0;
+            font-weight: 400;
+        }
+
+        .custom-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(45deg, #ff0055, #ff5078);
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 0, 85, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .custom-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(255, 0, 85, 0.6);
+        }
+
+        .heart-particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 100;
+            animation: floatAndFade 4s ease-in forwards;
+        }
+
+        @keyframes floatAndFade {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.8) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) scale(1.5) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starsCanvas"></canvas>
+
+    <!-- Müzik Ses Kaynağı -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="papatya.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <h1 class="header-title">Hümeyra & Ben</h1>
+        <p class="subtitle">Aramızdaki Her Bir Saniyenin Anısına ✨</p>
+
+        <div class="counter-box">
+            <div class="time-unit">
+                <span class="time-value" id="days">00</span>
+                <span class="time-label">Gün</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="hours">00</span>
+                <span class="time-label">Saat</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="minutes">00</span>
+                <span class="time-label">Dakika</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-value" id="seconds">00</span>
+                <span class="time-label">Saniye</span>
+            </div>
+        </div>
+
+        <div class="music-player">
+            <div class="vinyl" id="vinylRecord"></div>
+            <div class="song-info">
+                <div class="song-title">Papatya 🌼</div>
+                <div class="song-artist">Hirai Zerdüş</div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <p class="message-text" id="msgArea">
+                Aşağıdaki butona dokunduğunda şarkımız en güzel yerinden çalmaya başlayacak Hümeyra'm... 🎶❤️
+            </p>
+        </div>
+
+        <button class="custom-btn" onclick="nextMessage()" id="mainBtn">Müziği Aç & Başla ✨</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('starsCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for(let i = 0; i < 120; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5,
+                alpha: Math.random(),
+                speed: Math.random() * 0.02 + 0.005
+            });
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+                ctx.fill();
+
+                star.alpha += star.speed;
+                if (star.alpha > 1 || star.alpha < 0) {
+                    star.speed = -star.speed;
+                }
+            });
+            requestAnimationFrame(drawStars);
+        }
+        drawStars();
+
+        const startDate = new Date(2026, 7, 28, 0, 0, 0); 
+
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('days').innerText = d < 10 ? '0' + d : d;
+            document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+            document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
+            document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
+        }
+        setInterval(updateCounter, 1000);
+        updateCounter();
+
+        const messages = [
+            "Aramızdaki mesafeler haritada ne kadar uzak görünürse görünsün, kalbimin attığı her yerde sen varsın Hümeyra. 🌌",
+            "Uzak mesafeden sevmektir asıl emek... Görmeden, dokunmadan sadece hissettiklerinle birini dünyan yapmak. 🌼",
+            "Gözlerimi kapattığım an yanındayım. Yan yana geleceğimiz o ilk gün, dünyadaki tüm yollara değecek. ❤️",
+            "Hümeyra'm... Hayatımda olduğun, beni böyle güzel hissettirdiğin her saniye için iyi ki varsın! 👑",
+            "Seni her gün daha büyük bir aşkla, eksilmeden, katlanarak seviyorum! İYİ Kİ BİZ! 🎉💖"
+        ];
+
+        let msgIndex = 0;
+        let isMusicPlaying = false;
+
+        function nextMessage() {
+            const music = document.getElementById('bgMusic');
+            const vinyl = document.getElementById('vinylRecord');
+
+            // İlk tıklamada müziği en romantik yerinden (45. saniyeden) başlatır
+            if (!isMusicPlaying) {
+                music.currentTime = 45; // Şarkıyı 45. saniyeden başlatır
+                music.play().then(() => {
+                    vinyl.style.animationPlayState = 'running';
+                    isMusicPlaying = true;
+                }).catch(err => {
+                    console.log("Ses yürütme kısıtlaması:", err);
+                });
+            }
+
+            const msgArea = document.getElementById('msgArea');
+            const btn = document.getElementById('mainBtn');
+
+            msgArea.style.opacity = '0';
+            msgArea.style.transform = 'translateY(10px)';
+
+            setTimeout(() => {
+                if (msgIndex < messages.length) {
+                    msgArea.innerText = messages[msgIndex];
+                    btn.innerText = "Devam Et ❤️";
+                    msgIndex++;
+                } else {
+                    msgArea.innerHTML = "<b style='color:#ff007f; font-size:1.2rem;'>Sonsuza Kadar Hümeyra! ✨</b><br>Mesafeler biter, aşkımız kalır.";
+                    btn.innerText = "Sonsuz Kalp Yağmuru! 💖";
+                    startHeartRain();
+                }
+                msgArea.style.opacity = '1';
+                msgArea.style.transform = 'translateY(0)';
+            }, 300);
+
+            createBurstHearts(8);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-particle');
+            const shapes = ['❤️', '💖', '✨', '🌼', '💫'];
+            heart.innerText = shapes[Math.floor(Math.random() * shapes.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '100vh';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 4000);
+        }
+
+        function createBurstHearts(count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(createHeart, i * 80);
+            }
+        }
+
+        function startHeartRain() {
+            setInterval(createHeart, 100);
+        }
+    </script>
+</body>
+</html>
